@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/poll")
@@ -21,11 +22,18 @@ public class PollController {
 
 
     @GetMapping()
-    public ResponseEntity<List<PollDto>> getChildrenBySubgroup() {
+    public ResponseEntity<List<PollDto>> getAllPolls() {
         List<Poll> polls = pollService.getAllPolls();
-        List<PollDto> childrenDto = pollMapper.to(polls);
-        return ResponseEntity.ok(childrenDto);
-    }
+        List<PollDto> pollsDto = pollMapper.to(polls);
+        return ResponseEntity.ok(pollsDto);
+    };
+
+    @GetMapping("{pollId}")
+    public ResponseEntity<PollDto> getPollById(@PathVariable UUID pollId) {
+        Poll poll = pollService.getPollById(pollId);
+        PollDto pollDto = pollMapper.to(poll);
+        return ResponseEntity.ok(pollDto);
+    };
 
     @PostMapping
     public ResponseEntity<PollDto> save(@RequestBody PollCreateDto pollCreateDto) {

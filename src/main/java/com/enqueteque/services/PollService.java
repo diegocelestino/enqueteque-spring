@@ -6,8 +6,10 @@ import com.enqueteque.repositories.PollRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import com.enqueteque.exceptions.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -27,5 +29,10 @@ public class PollService {
 
     public List<Poll> getAllPolls() {
         return this.pollRepository.findAll();
+    }
+
+    public Poll getPollById(UUID pollId) {
+        return pollRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException(ResourceName.POLL, pollId));
     }
 }
