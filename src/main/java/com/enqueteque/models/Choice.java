@@ -29,4 +29,11 @@ public class Choice {
 
     @Column(nullable = false, name = "poll_id")
     private UUID pollId;
+
+    public Choice(String title, String image, UUID pollId){
+        this.id = UUID.randomUUID();
+        this.title = title;
+        this.image = image;
+        this.pollId = pollId;
+    }
 }

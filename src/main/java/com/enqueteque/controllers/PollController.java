@@ -20,7 +20,6 @@ public class PollController {
     private final PollService pollService;
     private final PollMapper pollMapper;
 
-
     @GetMapping()
     public ResponseEntity<List<PollDto>> getAllPolls() {
         List<Poll> polls = pollService.getAllPolls();

@@ -17,7 +17,6 @@ import java.util.UUID;
 public class PollService {
     private final PollRepository pollRepository;
 
-
     public Poll save(PollCreateDto pollCreateDto){
         return pollRepository.save(new Poll(
                 pollCreateDto.getTitle(),
