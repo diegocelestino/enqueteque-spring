@@ -6,11 +6,14 @@ import com.enqueteque.mappers.PollMapper;
 import com.enqueteque.models.Choice;
 import com.enqueteque.models.Poll;
 import com.enqueteque.repositories.PollRepository;
+import jakarta.xml.bind.DatatypeConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import com.enqueteque.exceptions.*;
 
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +43,14 @@ public class PollService {
         return new PollFullDto(pollDto, choicesDto);
     }
 
+    public PollFullDto getPollFullById(UUID pollId) {
+        Poll poll = getPollById(pollId);
+        List<Choice> choices = getChoicesByPollId(poll);
+        List<ChoiceDto> choicesDto = buildChoicesDto(choices);
+        PollDto pollDto = pollMapper.to(poll);
+        return new PollFullDto(pollDto, choicesDto);
+    }
+
     public Poll save(PollCreateDto pollCreateDto){
         return pollRepository.save(new Poll(
                 pollCreateDto.getTitle(),
@@ -47,12 +58,14 @@ public class PollService {
         ));
     }
 
-    public List<Poll> getAllPolls() {
-        return this.pollRepository.findAll();
+    public List<PollDto> getAllPolls() {
+        List<Poll> polls = this.pollRepository.findAll();
+        return buildPollsList(polls);
     }
 
-    public List<Poll> getAllPollsByCategory(String category) {
-        return this.pollRepository.findAllByCategory(category);
+    public List<PollDto> getAllPollsByCategory(String category) {
+        List<Poll> polls = this.pollRepository.findAllByCategory(category);
+        return buildPollsList(polls);
     }
 
     public List<String> getAllCategories() {
@@ -77,5 +90,22 @@ public class PollService {
         ChoiceDto choiceDto2 = choiceMapper.to(choices.get(1), getVotes(choices.get(1).getId()));
         return List.of(choiceDto1, choiceDto2);
     }
+
+    private List<PollDto> buildPollsList(List<Poll> polls) {
+        List<PollDto> pollsDto = pollMapper.to(polls);
+        for (PollDto pollDto: pollsDto) {
+            List<Choice> choices = choiceService.findAllByPollId(pollDto.getId());
+            pollDto.getImages().add(Base64.getEncoder()
+                    .withoutPadding()
+                    .encodeToString(
+                            choices.get(0).getImage()));
+            pollDto.getImages().add(Base64.getEncoder()
+                    .withoutPadding()
+                    .encodeToString(
+                            choices.get(1).getImage()));
+        }
+        return pollsDto;
+    }
+
 
 }

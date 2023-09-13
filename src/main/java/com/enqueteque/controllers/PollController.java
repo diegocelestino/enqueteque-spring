@@ -35,22 +35,19 @@ public class PollController {
 
     @GetMapping()
     public ResponseEntity<List<PollDto>> getAllPolls() {
-        List<Poll> polls = pollService.getAllPolls();
-        List<PollDto> pollsDto = pollMapper.to(polls);
+        List<PollDto> pollsDto = pollService.getAllPolls();
         return ResponseEntity.ok(pollsDto);
     };
 
     @GetMapping("{pollId}")
-    public ResponseEntity<PollDto> getPollById(@PathVariable UUID pollId) {
-        Poll poll = pollService.getPollById(pollId);
-        PollDto pollDto = pollMapper.to(poll);
-        return ResponseEntity.ok(pollDto);
+    public ResponseEntity<PollFullDto> getPollById(@PathVariable UUID pollId) {
+        PollFullDto pollFullDto = pollService.getPollFullById(pollId);
+        return ResponseEntity.ok(pollFullDto);
     };
 
     @GetMapping("/category/{category}")
     public ResponseEntity<List<PollDto>> getAllPollsByCategory(@PathVariable String category) {
-        List<Poll> polls = pollService.getAllPollsByCategory(category);
-        List<PollDto> pollsDto = pollMapper.to(polls);
+        List<PollDto> pollsDto = pollService.getAllPollsByCategory(category);
         return ResponseEntity.ok(pollsDto);
     };
 
