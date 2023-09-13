@@ -19,20 +19,29 @@ public class PollService {
 
 
     public Poll save(PollCreateDto pollCreateDto){
-        Poll poll = new Poll(
+        return pollRepository.save(new Poll(
                 pollCreateDto.getTitle(),
                 pollCreateDto.getCategory()
-        );
-
-        return pollRepository.save(poll);
+        ));
     }
 
     public List<Poll> getAllPolls() {
         return this.pollRepository.findAll();
     }
 
+    public List<Poll> getAllPollsByCategory(String category) {
+        return this.pollRepository.findAllByCategory(category);
+    }
+
+    public List<String> getAllCategories() {
+        return pollRepository.findAllCategories();
+    }
+
     public Poll getPollById(UUID pollId) {
         return pollRepository.findById(pollId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceName.POLL, pollId));
     }
+
+
+
 }
