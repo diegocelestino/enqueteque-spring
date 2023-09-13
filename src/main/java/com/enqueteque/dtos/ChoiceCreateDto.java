@@ -10,6 +10,5 @@ public class ChoiceCreateDto {
 
     String title;
     String image;
-    UUID pollId;
 
 }

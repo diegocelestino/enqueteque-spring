@@ -1,6 +1,9 @@
 package com.enqueteque.services;
 
-import com.enqueteque.dtos.PollCreateDto;
+import com.enqueteque.dtos.*;
+import com.enqueteque.mappers.ChoiceMapper;
+import com.enqueteque.mappers.PollMapper;
+import com.enqueteque.models.Choice;
 import com.enqueteque.models.Poll;
 import com.enqueteque.repositories.PollRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +19,21 @@ import java.util.UUID;
 @Log4j2
 public class PollService {
     private final PollRepository pollRepository;
+    private final ChoiceService choiceService;
+    private final PollMapper pollMapper;
+    private final ChoiceMapper choiceMapper;
+
+    public PollFullDto saveFullPoll(PollCreateFullDto pollCreateFullDto) {
+        Poll poll = save(pollCreateFullDto.getPollCreateDto());
+        Choice choice1 = choiceService.save(pollCreateFullDto.getChoices().get(0), poll.getId());
+        Choice choice2 = choiceService.save(pollCreateFullDto.getChoices().get(1), poll.getId());
+
+        PollDto pollDto = pollMapper.to(poll);
+        ChoiceDto choiceDto1 = choiceMapper.to(choice1);
+        ChoiceDto choiceDto2 = choiceMapper.to(choice2);
+
+        return new PollFullDto(pollDto, List.of(choiceDto1, choiceDto2));
+    }
 
     public Poll save(PollCreateDto pollCreateDto){
         return pollRepository.save(new Poll(

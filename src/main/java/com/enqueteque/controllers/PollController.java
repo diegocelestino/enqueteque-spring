@@ -1,7 +1,8 @@
 package com.enqueteque.controllers;
 
-import com.enqueteque.dtos.PollCreateDto;
+import com.enqueteque.dtos.PollCreateFullDto;
 import com.enqueteque.dtos.PollDto;
+import com.enqueteque.dtos.PollFullDto;
 import com.enqueteque.mappers.PollMapper;
 import com.enqueteque.models.Poll;
 import com.enqueteque.services.PollService;
@@ -47,10 +48,9 @@ public class PollController {
         return ResponseEntity.ok(pollDto);
     };
 
-    @PostMapping
-    public ResponseEntity<PollDto> save(@RequestBody PollCreateDto pollCreateDto) {
-        Poll poll = pollService.save(pollCreateDto);
-        PollDto pollDto = pollMapper.to(poll);
-        return ResponseEntity.ok(pollDto);
+    @PostMapping()
+    public ResponseEntity<PollFullDto> saveFullPoll(@RequestBody PollCreateFullDto pollCreateFullDto) {
+        PollFullDto pollFullDto = pollService.saveFullPoll(pollCreateFullDto);
+        return ResponseEntity.ok(pollFullDto);
     }
 }

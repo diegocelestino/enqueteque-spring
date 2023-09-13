@@ -1,4 +1,4 @@
-package com.enqueteque;
+package com.enqueteque.anotherResources;
 
 import jakarta.xml.bind.DatatypeConverter;
 
@@ -11,7 +11,7 @@ public class ByteaToImageTest {
     public static void main(String[] args) throws IOException {
 
         //loads an image and transforms it to bytea
-        BufferedImage bImage = ImageIO.read(new File("C:/Users/diego/Pictures/EnqueteQue/abilio_brunini.jpg"));
+        BufferedImage bImage = ImageIO.read(new File("C:/Users/diego/Pictures/EnqueteQue/dedao_do_pe.jpg"));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ImageIO.write(bImage, "jpg", bos );
         byte [] data = bos.toByteArray();
