@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -23,4 +24,10 @@ public class Vote {
 
     @Column(nullable = false, name = "choice_id")
     private UUID choiceId;
+
+    public Vote(UUID choiceId){
+        this.id = UUID.randomUUID();
+        this.createDate = Timestamp.from(Instant.now());
+        this.choiceId = choiceId;
+    }
 }
