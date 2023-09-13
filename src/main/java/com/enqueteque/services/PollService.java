@@ -20,6 +20,7 @@ import java.util.UUID;
 public class PollService {
     private final PollRepository pollRepository;
     private final ChoiceService choiceService;
+    private final VoteService voteService;
     private final PollMapper pollMapper;
     private final ChoiceMapper choiceMapper;
 
@@ -29,8 +30,8 @@ public class PollService {
         Choice choice2 = choiceService.save(pollCreateFullDto.getChoices().get(1), poll.getId());
 
         PollDto pollDto = pollMapper.to(poll);
-        ChoiceDto choiceDto1 = choiceMapper.to(choice1);
-        ChoiceDto choiceDto2 = choiceMapper.to(choice2);
+        ChoiceDto choiceDto1 = choiceMapper.to(choice1, 0);
+        ChoiceDto choiceDto2 = choiceMapper.to(choice2, 0);
 
         return new PollFullDto(pollDto, List.of(choiceDto1, choiceDto2));
     }
@@ -40,8 +41,13 @@ public class PollService {
         List<Choice> choices = choiceService.findAllByPollId(poll.getId());
 
         PollDto pollDto = pollMapper.to(poll);
-        ChoiceDto choiceDto1 = choiceMapper.to(choices.get(0));
-        ChoiceDto choiceDto2 = choiceMapper.to(choices.get(1));
+        ChoiceDto choiceDto1 = choiceMapper.to(
+                choices.get(0),
+                getNumberOfChoiceVotes(choices.get(0).getId()));
+
+        ChoiceDto choiceDto2 = choiceMapper.to(
+                choices.get(1),
+                getNumberOfChoiceVotes(choices.get(1).getId()));
 
         return new PollFullDto(pollDto, List.of(choiceDto1, choiceDto2));
     }
@@ -68,6 +74,10 @@ public class PollService {
     public Poll getPollById(UUID pollId) {
         return pollRepository.findById(pollId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceName.POLL, pollId));
+    }
+
+    public Integer getNumberOfChoiceVotes(UUID choiceId){
+        return voteService.getNumberOfChoiceVotes(choiceId);
     }
 
 

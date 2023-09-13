@@ -15,4 +15,5 @@ public class ChoiceDto {
     String title;
     String image;
     UUID pollId;
+    Integer votes;
 }

@@ -13,12 +13,13 @@ import java.util.List;
 
 @Component
 public class ChoiceMapper {
-    public ChoiceDto to(Choice choice) {
+    public ChoiceDto to(Choice choice, Integer votes) {
         return new ChoiceDto(
                 choice.getId(),
                 choice.getTitle(),
                 Base64.getEncoder().withoutPadding().encodeToString(choice.getImage()),
-                choice.getPollId()
+                choice.getPollId(),
+                votes
         );
     }
 }

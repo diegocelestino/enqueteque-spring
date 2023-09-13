@@ -17,4 +17,8 @@ public class VoteService {
     public void save(UUID choiceId) {
         voteRepository.save(new Vote(choiceId));
     }
+
+    public Integer getNumberOfChoiceVotes(UUID choiceId) {
+        return voteRepository.countVotesByChoiceId(choiceId);
+    }
 }

@@ -21,8 +21,6 @@ public class PollController {
     private final PollService pollService;
     private final PollMapper pollMapper;
 
-
-
     @GetMapping()
     public ResponseEntity<List<PollDto>> getAllPolls() {
         List<Poll> polls = pollService.getAllPolls();
@@ -35,6 +33,11 @@ public class PollController {
         PollFullDto pollFullDto = pollService.getLatestPoll();
         return ResponseEntity.ok(pollFullDto);
     };
+
+
+
+
+
 
     @GetMapping("/category/{category}")
     public ResponseEntity<List<PollDto>> getAllPollsByCategory(@PathVariable String category) {
