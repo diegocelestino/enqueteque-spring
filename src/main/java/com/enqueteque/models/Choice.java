@@ -25,12 +25,12 @@ public class Choice {
     private String title;
 
     @Column(nullable = false)
-    private String image;
+    private byte[] image;
 
     @Column(nullable = false, name = "poll_id")
     private UUID pollId;
 
-    public Choice(String title, String image, UUID pollId){
+    public Choice(String title, byte[] image, UUID pollId){
         this.id = UUID.randomUUID();
         this.title = title;
         this.image = image;

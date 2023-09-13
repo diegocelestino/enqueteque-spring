@@ -7,6 +7,8 @@ import com.enqueteque.models.Poll;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 @Component
@@ -15,7 +17,7 @@ public class ChoiceMapper {
         return new ChoiceDto(
                 choice.getId(),
                 choice.getTitle(),
-                choice.getImage(),
+                Base64.getEncoder().withoutPadding().encodeToString(choice.getImage()),
                 choice.getPollId()
         );
     }
