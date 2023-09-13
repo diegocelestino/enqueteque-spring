@@ -35,6 +35,17 @@ public class PollService {
         return new PollFullDto(pollDto, List.of(choiceDto1, choiceDto2));
     }
 
+    public PollFullDto getLatestPoll() {
+        Poll poll = pollRepository.findLatest();
+        List<Choice> choices = choiceService.findAllByPollId(poll.getId());
+
+        PollDto pollDto = pollMapper.to(poll);
+        ChoiceDto choiceDto1 = choiceMapper.to(choices.get(0));
+        ChoiceDto choiceDto2 = choiceMapper.to(choices.get(1));
+
+        return new PollFullDto(pollDto, List.of(choiceDto1, choiceDto2));
+    }
+
     public Poll save(PollCreateDto pollCreateDto){
         return pollRepository.save(new Poll(
                 pollCreateDto.getTitle(),
@@ -58,7 +69,6 @@ public class PollService {
         return pollRepository.findById(pollId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceName.POLL, pollId));
     }
-
 
 
 }

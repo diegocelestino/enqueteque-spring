@@ -21,11 +21,19 @@ public class PollController {
     private final PollService pollService;
     private final PollMapper pollMapper;
 
+
+
     @GetMapping()
     public ResponseEntity<List<PollDto>> getAllPolls() {
         List<Poll> polls = pollService.getAllPolls();
         List<PollDto> pollsDto = pollMapper.to(polls);
         return ResponseEntity.ok(pollsDto);
+    };
+
+    @GetMapping("/latest")
+    public ResponseEntity<PollFullDto> getLatestPoll() {
+        PollFullDto pollFullDto = pollService.getLatestPoll();
+        return ResponseEntity.ok(pollFullDto);
     };
 
     @GetMapping("/category/{category}")

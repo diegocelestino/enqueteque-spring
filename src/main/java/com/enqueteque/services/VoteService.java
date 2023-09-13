@@ -1,6 +1,5 @@
 package com.enqueteque.services;
 
-import com.enqueteque.dtos.VoteCreateDto;
 import com.enqueteque.models.Vote;
 import com.enqueteque.repositories.VoteRepository;
 import lombok.AllArgsConstructor;

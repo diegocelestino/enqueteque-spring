@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,5 +23,9 @@ public class ChoiceService {
                 DatatypeConverter.parseBase64Binary(choiceCreateDto.getImage()),
                 pollId
         ));
+    }
+
+    public List<Choice> findAllByPollId(UUID pollId) {
+        return choiceRepository.findAllByPollId(pollId);
     }
 }

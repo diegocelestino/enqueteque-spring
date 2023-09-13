@@ -1,7 +1,5 @@
 package com.enqueteque.controllers;
 
-import com.enqueteque.dtos.VoteCreateDto;
-import com.enqueteque.models.Vote;
 import com.enqueteque.services.VoteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
