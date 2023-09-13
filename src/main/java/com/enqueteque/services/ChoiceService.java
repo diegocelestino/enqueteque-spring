@@ -2,12 +2,14 @@ package com.enqueteque.services;
 
 import com.enqueteque.dtos.ChoiceCreateDto;
 import com.enqueteque.models.Choice;
+import com.enqueteque.models.Poll;
 import com.enqueteque.repositories.ChoiceRepository;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,5 +29,17 @@ public class ChoiceService {
 
     public List<Choice> findAllByPollId(UUID pollId) {
         return choiceRepository.findAllByPollId(pollId);
+    }
+
+    public List<Choice> saveChoices(List<ChoiceCreateDto> choicesCreateDto, Poll poll) {
+        List<Choice> choices = new ArrayList<>();
+        for (ChoiceCreateDto choiceCreateDto : choicesCreateDto) {
+            choices.add(choiceRepository.save(new Choice(
+                    choiceCreateDto.getTitle(),
+                    DatatypeConverter.parseBase64Binary(choiceCreateDto.getImage()),
+                    poll.getId()
+            )));
+        }
+        return choices;
     }
 }

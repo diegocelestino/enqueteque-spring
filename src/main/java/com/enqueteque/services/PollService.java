@@ -26,30 +26,18 @@ public class PollService {
 
     public PollFullDto saveFullPoll(PollCreateFullDto pollCreateFullDto) {
         Poll poll = save(pollCreateFullDto.getPollCreateDto());
-        Choice choice1 = choiceService.save(pollCreateFullDto.getChoices().get(0), poll.getId());
-        Choice choice2 = choiceService.save(pollCreateFullDto.getChoices().get(1), poll.getId());
-
+        List<Choice> choices = choiceService.saveChoices(pollCreateFullDto.getChoices(), poll);
+        List<ChoiceDto> choicesDto = buildChoicesDto(choices);
         PollDto pollDto = pollMapper.to(poll);
-        ChoiceDto choiceDto1 = choiceMapper.to(choice1, 0);
-        ChoiceDto choiceDto2 = choiceMapper.to(choice2, 0);
-
-        return new PollFullDto(pollDto, List.of(choiceDto1, choiceDto2));
+        return new PollFullDto(pollDto, choicesDto);
     }
 
     public PollFullDto getLatestPoll() {
         Poll poll = pollRepository.findLatest();
-        List<Choice> choices = choiceService.findAllByPollId(poll.getId());
-
+        List<Choice> choices = getChoicesByPollId(poll);
+        List<ChoiceDto> choicesDto = buildChoicesDto(choices);
         PollDto pollDto = pollMapper.to(poll);
-        ChoiceDto choiceDto1 = choiceMapper.to(
-                choices.get(0),
-                getNumberOfChoiceVotes(choices.get(0).getId()));
-
-        ChoiceDto choiceDto2 = choiceMapper.to(
-                choices.get(1),
-                getNumberOfChoiceVotes(choices.get(1).getId()));
-
-        return new PollFullDto(pollDto, List.of(choiceDto1, choiceDto2));
+        return new PollFullDto(pollDto, choicesDto);
     }
 
     public Poll save(PollCreateDto pollCreateDto){
@@ -76,9 +64,18 @@ public class PollService {
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceName.POLL, pollId));
     }
 
-    public Integer getNumberOfChoiceVotes(UUID choiceId){
+    public Integer getVotes(UUID choiceId){
         return voteService.getNumberOfChoiceVotes(choiceId);
     }
 
+    private List<Choice> getChoicesByPollId(Poll poll){
+        return choiceService.findAllByPollId(poll.getId());
+    }
+
+    private List<ChoiceDto> buildChoicesDto(List<Choice> choices) {
+        ChoiceDto choiceDto1 = choiceMapper.to(choices.get(0), getVotes(choices.get(0).getId()));
+        ChoiceDto choiceDto2 = choiceMapper.to(choices.get(1), getVotes(choices.get(1).getId()));
+        return List.of(choiceDto1, choiceDto2);
+    }
 
 }

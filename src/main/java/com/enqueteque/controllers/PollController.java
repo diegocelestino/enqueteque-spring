@@ -21,6 +21,18 @@ public class PollController {
     private final PollService pollService;
     private final PollMapper pollMapper;
 
+    @GetMapping("/latest")
+    public ResponseEntity<PollFullDto> getLatestPoll() {
+        PollFullDto pollFullDto = pollService.getLatestPoll();
+        return ResponseEntity.ok(pollFullDto);
+    };
+
+    @PostMapping()
+    public ResponseEntity<PollFullDto> saveFullPoll(@RequestBody PollCreateFullDto pollCreateFullDto) {
+        PollFullDto pollFullDto = pollService.saveFullPoll(pollCreateFullDto);
+        return ResponseEntity.ok(pollFullDto);
+    }
+
     @GetMapping()
     public ResponseEntity<List<PollDto>> getAllPolls() {
         List<Poll> polls = pollService.getAllPolls();
@@ -28,16 +40,12 @@ public class PollController {
         return ResponseEntity.ok(pollsDto);
     };
 
-    @GetMapping("/latest")
-    public ResponseEntity<PollFullDto> getLatestPoll() {
-        PollFullDto pollFullDto = pollService.getLatestPoll();
-        return ResponseEntity.ok(pollFullDto);
+    @GetMapping("{pollId}")
+    public ResponseEntity<PollDto> getPollById(@PathVariable UUID pollId) {
+        Poll poll = pollService.getPollById(pollId);
+        PollDto pollDto = pollMapper.to(poll);
+        return ResponseEntity.ok(pollDto);
     };
-
-
-
-
-
 
     @GetMapping("/category/{category}")
     public ResponseEntity<List<PollDto>> getAllPollsByCategory(@PathVariable String category) {
@@ -51,17 +59,4 @@ public class PollController {
         List<String> categories = pollService.getAllCategories();
         return ResponseEntity.ok(categories);
     };
-
-    @GetMapping("{pollId}")
-    public ResponseEntity<PollDto> getPollById(@PathVariable UUID pollId) {
-        Poll poll = pollService.getPollById(pollId);
-        PollDto pollDto = pollMapper.to(poll);
-        return ResponseEntity.ok(pollDto);
-    };
-
-    @PostMapping()
-    public ResponseEntity<PollFullDto> saveFullPoll(@RequestBody PollCreateFullDto pollCreateFullDto) {
-        PollFullDto pollFullDto = pollService.saveFullPoll(pollCreateFullDto);
-        return ResponseEntity.ok(pollFullDto);
-    }
 }
