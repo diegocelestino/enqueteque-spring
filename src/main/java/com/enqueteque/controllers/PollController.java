@@ -19,7 +19,6 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class PollController {
     private final PollService pollService;
-    private final PollMapper pollMapper;
 
     @GetMapping("/latest")
     public ResponseEntity<PollFullDto> getLatestPoll() {

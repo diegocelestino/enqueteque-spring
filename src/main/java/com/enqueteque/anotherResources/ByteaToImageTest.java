@@ -11,7 +11,7 @@ public class ByteaToImageTest {
     public static void main(String[] args) throws IOException {
 
         //loads an image and transforms it to bytea
-        BufferedImage bImage = ImageIO.read(new File("C:/Users/diego/Pictures/EnqueteQue/dedao_do_pe.jpg"));
+        BufferedImage bImage = ImageIO.read(new File("C:/Users/diego/Pictures/EnqueteQue/porta.jpg"));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ImageIO.write(bImage, "jpg", bos );
         byte [] data = bos.toByteArray();
@@ -23,13 +23,26 @@ public class ByteaToImageTest {
         //transform a base64 back into a bytea
         byte[] dataFromBase64ToBytea = DatatypeConverter.parseBase64Binary(encodeImage);
 
-        //write the bytea into a file
-        String path = "C:/Users/diego/Pictures/EnqueteQue/" + "01.jpg";
+//        //write the bytea into a file
+//        String path = "C:/Users/diego/Pictures/EnqueteQue/" + "moro.txt";
+//        File file = new File(path);
+//        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))){
+//            outputStream.write(dataFromBase64ToBytea);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+
+        //write the base64 into a file
+        String path = "C:/Users/diego/Pictures/EnqueteQue/Base64/" + "porta.txt";
         File file = new File(path);
-        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))){
-            outputStream.write(dataFromBase64ToBytea);
+        try(OutputStream outputStream = new FileOutputStream(file)){
+            Writer wr = new OutputStreamWriter(outputStream); // criação de um escritor
+            BufferedWriter br = new BufferedWriter(wr); // adiciono a um escritor de buffer
+            br.write(encodeImage);
+
         } catch (Exception e){
             e.printStackTrace();
         }
+
     }
 }
