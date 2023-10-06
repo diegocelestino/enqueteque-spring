@@ -1,5 +1,6 @@
 package com.enqueteque.dtos;
 
+import com.enqueteque.models.Poll;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Value;
@@ -26,5 +27,14 @@ public class PollDto {
         this.createDate = createDate;
         this.images = new ArrayList<String>();
     }
+
+    public PollDto(Poll poll) {
+        this.id = poll.getId();
+        this.title = poll.getTitle();
+        this.category = poll.getCategory();
+        this.createDate = poll.getCreateDate();
+        this.images = new ArrayList<String>();
+    }
+
 
 }

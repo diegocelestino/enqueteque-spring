@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -16,8 +18,10 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping("{choiceId}")
-    public ResponseEntity<String> create(@PathVariable UUID choiceId){
+    public ResponseEntity<Map<String, String>> create(@PathVariable UUID choiceId){
         voteService.save(choiceId);
-        return ResponseEntity.status(HttpStatus.CREATED).body("ok");
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("status", "ok");
+        return ResponseEntity.ok(response);
     }
 }

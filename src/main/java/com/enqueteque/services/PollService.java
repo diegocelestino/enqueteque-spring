@@ -5,15 +5,20 @@ import com.enqueteque.mappers.ChoiceMapper;
 import com.enqueteque.mappers.PollMapper;
 import com.enqueteque.models.Choice;
 import com.enqueteque.models.Poll;
+import com.enqueteque.models.PollComparator;
 import com.enqueteque.repositories.PollRepository;
-import jakarta.xml.bind.DatatypeConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cglib.core.Converter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.enqueteque.exceptions.*;
 
-import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +27,7 @@ import java.util.UUID;
 @Log4j2
 public class PollService {
     private final PollRepository pollRepository;
-    private final ChoiceService choiceService;
+    private ChoiceService choiceService;
     private final VoteService voteService;
     private final PollMapper pollMapper;
     private final ChoiceMapper choiceMapper;
@@ -58,14 +63,27 @@ public class PollService {
         ));
     }
 
-    public List<PollDto> getAllPolls() {
-        List<Poll> polls = this.pollRepository.findAll();
+    public PollPageDto getAllPollsPage(Pageable pageable) {
+        Page<Poll> pollPage = this.pollRepository.findAll(pageable);
+        return new PollPageDto(
+                pollPage.getTotalPages(),
+                pollPage.getTotalElements(),
+                pollPage.getSize(),
+                this.buildPollsList(pollPage.getContent()
+                )
+        );
+    }
+
+    public List<PollDto> getOthersPolls() {
+        List<Poll> polls = this.pollRepository.findOthers();
+        polls.remove(0);
         return buildPollsList(polls);
     }
 
-    public List<PollDto> getAllPollsByCategory(String category) {
+    public PollPageDto getAllPollsByCategory(String category) {
         List<Poll> polls = this.pollRepository.findAllByCategory(category);
-        return buildPollsList(polls);
+        List<PollDto> pollDto = buildPollsList(polls);
+        return new PollPageDto(1, Long.parseLong(String.valueOf(pollDto.size())), pollDto.size(), pollDto);
     }
 
     public List<String> getAllCategories() {
@@ -106,6 +124,7 @@ public class PollService {
         }
         return pollsDto;
     }
+
 
 
 }
