@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PollRepository extends JpaRepository<Poll, UUID> {
+
+
     List<Poll> findAllByCategory(String category);
 
     @Query(value = "SELECT DISTINCT category FROM polls",

@@ -65,8 +65,10 @@ public class PollService {
 
     public PollPageDto getAllPollsPage(Pageable pageable) {
         Page<Poll> pollPage = this.pollRepository.findAll(pageable);
+        System.out.println(pollPage.getNumber());
         return new PollPageDto(
                 pollPage.getTotalPages(),
+                pollPage.getNumber(),
                 pollPage.getTotalElements(),
                 pollPage.getSize(),
                 this.buildPollsList(pollPage.getContent()
@@ -83,7 +85,11 @@ public class PollService {
     public PollPageDto getAllPollsByCategory(String category) {
         List<Poll> polls = this.pollRepository.findAllByCategory(category);
         List<PollDto> pollDto = buildPollsList(polls);
-        return new PollPageDto(1, Long.parseLong(String.valueOf(pollDto.size())), pollDto.size(), pollDto);
+        return new PollPageDto(1,
+                0,
+                Long.parseLong(String.valueOf(pollDto.size())),
+                pollDto.size(),
+                pollDto);
     }
 
     public List<String> getAllCategories() {
@@ -124,7 +130,4 @@ public class PollService {
         }
         return pollsDto;
     }
-
-
-
 }

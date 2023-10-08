@@ -11,6 +11,7 @@ import java.util.List;
 @Value
 public class PollPageDto {
     Integer totalPages;
+    Integer actualPage;
     Long totalElements;
     Integer size;
     List<PollDto> pollDtoList;
