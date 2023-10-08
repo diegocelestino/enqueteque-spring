@@ -43,8 +43,6 @@ public class PollController {
         return ResponseEntity.ok(pollFullDto);
     }
 
-
-
     @GetMapping()
     public ResponseEntity<PollPageDto> getAllPolls(@PageableDefault(page = 0, size = 15) Pageable pageable) {
         PollPageDto pollsDto = pollService.getAllPollsPage(pageable);
@@ -59,8 +57,10 @@ public class PollController {
     };
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<PollPageDto>getAllPollsByCategory(@PathVariable String category) {
-        PollPageDto pollsDto = pollService.getAllPollsByCategory(category);
+    public ResponseEntity<PollPageDto>getAllPollsByCategory(
+            @PageableDefault(page = 0, size = 15) Pageable pageable,
+            @PathVariable String category) {
+        PollPageDto pollsDto = pollService.getAllPollsByCategory(category, pageable);
         return ResponseEntity.ok(pollsDto);
     };
 
