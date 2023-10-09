@@ -130,4 +130,9 @@ public class PollService {
         }
         return pollsDto;
     }
+
+    public List<PollDto> getAllPollsAdmin() {
+        List<Poll> polls = this.pollRepository.findAll();
+        return this.pollMapper.to(polls);
+    }
 }

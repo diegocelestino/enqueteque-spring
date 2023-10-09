@@ -25,6 +25,13 @@ import java.util.UUID;
 public class PollController {
     private final PollService pollService;
 
+    @GetMapping("/admin")
+    public ResponseEntity<List<PollDto>> getAllPollsAdmin(){
+        List<PollDto> pollsDto = pollService.getAllPollsAdmin();
+        return ResponseEntity.ok(pollsDto);
+
+    };
+
     @GetMapping("/latest")
     public ResponseEntity<PollFullDto> getLatestPoll() {
         PollFullDto pollFullDto = pollService.getLatestPoll();
@@ -36,12 +43,6 @@ public class PollController {
         List<PollDto> pollsDto = pollService.getOthersPolls();
         return ResponseEntity.ok(pollsDto);
     };
-
-    @PostMapping()
-    public ResponseEntity<PollFullDto> saveFullPoll(@RequestBody PollCreateFullDto pollCreateFullDto) {
-        PollFullDto pollFullDto = pollService.saveFullPoll(pollCreateFullDto);
-        return ResponseEntity.ok(pollFullDto);
-    }
 
     @GetMapping()
     public ResponseEntity<PollPageDto> getAllPolls(@PageableDefault(page = 0, size = 15) Pageable pageable) {
@@ -69,4 +70,10 @@ public class PollController {
         List<String> categories = pollService.getAllCategories();
         return ResponseEntity.ok(categories);
     };
+
+    @PostMapping()
+    public ResponseEntity<PollFullDto> saveFullPoll(@RequestBody PollCreateFullDto pollCreateFullDto) {
+        PollFullDto pollFullDto = pollService.saveFullPoll(pollCreateFullDto);
+        return ResponseEntity.ok(pollFullDto);
+    }
 }
