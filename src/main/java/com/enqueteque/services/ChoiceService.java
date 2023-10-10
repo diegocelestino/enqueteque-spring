@@ -1,6 +1,7 @@
 package com.enqueteque.services;
 
 import com.enqueteque.dtos.ChoiceCreateDto;
+import com.enqueteque.dtos.ChoiceDto;
 import com.enqueteque.models.Choice;
 import com.enqueteque.models.Poll;
 import com.enqueteque.repositories.ChoiceRepository;
@@ -38,6 +39,19 @@ public class ChoiceService {
                     choiceCreateDto.getTitle(),
                     DatatypeConverter.parseBase64Binary(choiceCreateDto.getImage()),
                     poll.getId()
+            )));
+        }
+        return choices;
+    }
+
+    public List<Choice> updateChoices(List<ChoiceDto> choicesDto, UUID pollId) {
+        List<Choice> choices = new ArrayList<>();
+        for (ChoiceDto choiceDto : choicesDto) {
+            choices.add(choiceRepository.save(new Choice(
+                    choiceDto.getId(),
+                    choiceDto.getTitle(),
+                    DatatypeConverter.parseBase64Binary(choiceDto.getImage()),
+                    pollId
             )));
         }
         return choices;

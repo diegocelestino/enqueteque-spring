@@ -25,12 +25,7 @@ import java.util.UUID;
 public class PollController {
     private final PollService pollService;
 
-    @GetMapping("/admin")
-    public ResponseEntity<List<PollDto>> getAllPollsAdmin(){
-        List<PollDto> pollsDto = pollService.getAllPollsAdmin();
-        return ResponseEntity.ok(pollsDto);
 
-    };
 
     @GetMapping("/latest")
     public ResponseEntity<PollFullDto> getLatestPoll() {
@@ -71,9 +66,5 @@ public class PollController {
         return ResponseEntity.ok(categories);
     };
 
-    @PostMapping()
-    public ResponseEntity<PollFullDto> saveFullPoll(@RequestBody PollCreateFullDto pollCreateFullDto) {
-        PollFullDto pollFullDto = pollService.saveFullPoll(pollCreateFullDto);
-        return ResponseEntity.ok(pollFullDto);
-    }
+
 }

@@ -135,4 +135,18 @@ public class PollService {
         List<Poll> polls = this.pollRepository.findAll();
         return this.pollMapper.to(polls);
     }
+
+    public PollFullDto updateFullPoll(PollFullDto pollFullDto) {
+        Poll poll = this.pollRepository.save(new Poll(
+                pollFullDto.getPollDto().getId(),
+                pollFullDto.getPollDto().getTitle(),
+                pollFullDto.getPollDto().getCategory(),
+                pollFullDto.getPollDto().getCreateDate()
+        ));
+        List<Choice> choices = this.choiceService.updateChoices(
+                pollFullDto.getChoices(),
+                pollFullDto.getPollDto().getId());
+
+        return new PollFullDto(this.pollMapper.to(poll), this.buildChoicesDto(choices));
+    }
 }

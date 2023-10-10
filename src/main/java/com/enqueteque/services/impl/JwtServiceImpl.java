@@ -20,7 +20,6 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    //COLOCAR UM ESPAÇO PARA OS TOKENS NO BANCO ESQUECI DESSA MERDA
     @Value("${token.signing.key}")
     private String jwtSigningKey;
     @Override

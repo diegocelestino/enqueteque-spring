@@ -36,4 +36,6 @@ public class Choice {
         this.image = image;
         this.pollId = pollId;
     }
+
+
 }
